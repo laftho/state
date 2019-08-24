@@ -1,4 +1,6 @@
-import store from './store.js';
+import store, { defaultReducer } from './store.js';
+
+import withUserRemoteActions from '../remotes/user.js';
 
 const create = dispatch => name => dispatch({
   type: "create",
@@ -7,7 +9,9 @@ const create = dispatch => name => dispatch({
   reducer: (state, action) => ({
     ...state,
     [action.id]: {
-      name: action.name
+      data: {
+        name: action.name
+      }
     }
   })
 });
@@ -18,12 +22,31 @@ const remove = dispatch => id => dispatch({
   reducer: (state, action) => ({
     ...Object.keys(state)
       .filter(id => id !== action.id)
+      .map(id => state[id])
   })
 });
 
-export const { Context: UserStoreContext, withStore: withUserStore } = store({
-  actions: dispatch => ({
-    create: create(dispatch),
-    remove: remove(dispatch)
-  })
+const actions = dispatch => ({
+  create: create(dispatch),
+  remove: remove(dispatch)
 });
+
+const { Context: UserStoreContext, withStore } = store({
+  actions: withUserRemoteActions(actions)
+});
+
+const initialState = {
+  guy: {
+    data: {
+      name: "guy"
+    },
+    loading: false
+  }
+};
+
+const withUserStore = withStore(initialState);
+
+export {
+  UserStoreContext,
+  withUserStore
+};

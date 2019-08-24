@@ -11,4 +11,4 @@ export const App = () => (
   </div>
 );
 
-export default withUserStore({})(App);
+export default withUserStore(App);

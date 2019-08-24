@@ -4,9 +4,11 @@ import { UserStoreContext } from '../stores/user.js';
 
 const User = ({ id }) => {
   const { store: users, actions: { remove }} = useContext(UserStoreContext);
+  
+  const { loading, data: { name } } = users[id];
 
   return (
-   <li>{users[id].name} <button onClick={() => remove(id)}>Delete</button></li>
+   <li>{name} {loading ? "*" : ""}<button onClick={() => remove(id)} disabled={loading}>Delete</button></li>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 
-const defaultReducer = (state, action) => action.reducer ? action.reducer(state, action) : state;
+export const defaultReducer = (state, action) => action.reducer ? action.reducer(state, action) : state;
 
 const withStore = (Context, actions, reducer) => initialState => BaseComponent => props => {
     const [state, dispatch] = useReducer(reducer, initialState);
